@@ -4,13 +4,20 @@ const app = express()
 
 app.use(express.json())
 
+app.use((req, res, next) => {
+  req.reqTimes = new Date().toISOString()
+  next()
+})
+
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 )
 
 const getAllTours = (req, res) => {
+  console.log(req.reqTimes)
   res.status(200).json({
     status: 'success',
+    reqetAt: req.reqTimes,
     length: tours.length,
     data: { tours },
   })
